@@ -10,7 +10,7 @@ cd /home/ubuntu/
 git clone https://github.com/nicholbs/robusteTjenester.git
 
 #Last ned bookface kode
-git clone https://git.cs.oslomet.no/kyrre.begnum/bookface
+git clone https://git.cs.oslomet.no/kyrre.begnum/bookface.git
 
 #Laster ned docker programmet og kjører nedlastningen
 curl -fsSL https://get.docker.com -o get-docker.sh

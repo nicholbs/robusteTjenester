@@ -1,5 +1,70 @@
-echo "Hva skal ny instanse hete?"
+#!/bin/bash
 
-read navnPaMaskin
+#Skriv navn på ny maskin
+printf "Hva skal ny instanse hete: "
 
-openstack server create --image 1676adb4-9657-42ed-b31f-b3907cbcd697 --flavor 3d0d6b55-971e-4fe6-9c90-f9c059ff70ca --key-name manager_key --user-data /home/ubuntu/robusteTjenester/Script/dockerDownload.sh $navnPaMaskin
+read navnPaMaskin;
+
+if [ -z "$navnPaMaskin" ]
+then
+	printf "\nskjerp deg, skriv et skikkelig navn neste gang\n";
+	exit 1;
+else
+	printf "\nDu skrev navnet: $navnPaMaskin\n";
+fi
+
+
+#Velg Nøkkel til den nye maskinen
+if openstack keypair list | grep "key" > /dev/null
+then
+	printf "Det fantes nokler\n"
+else
+	printf "Det fantes ikke nokler, avslutter program\n"
+	exit 1;
+fi
+
+nokler=$(openstack keypair list | grep "key" | awk '{print $2}')
+
+number=1;
+for key in $nokler
+do
+	printf  "$number: $key\n";
+	number=$(($number + 1));
+done;
+
+printf "Hvilken nOokel vil du bruke pAa den nye maskinen: "
+read navnPaNokel
+
+if [ -z "$navnPaNokel" ]
+then	printf "\n Skriv et skikkelig navn bish\n"
+else	printf "\nDu har valgt $navnPaNokel\n"
+fi
+
+
+
+
+#Velg script til den nye maskinen
+printf "Nedenfor er oppstart skriptene du kan velge mellom:\n";
+FILES=/home/ubuntu/robusteTjenester/Script/create/*
+number=1;
+for file in $FILES
+do 
+	printf "$number.	$(basename $file)\n"
+	let "number+=1"
+done
+
+printf "\nHvilken fil vil du den nye maskinen skal lages fra: ";
+read navnPaFil;
+
+
+
+if [ -z "$navnPaFil" ]
+then 
+	printf "\nSkriv ett skikkelig navn\n";
+	exit 1;
+else
+printf "\nDu har valgt filen: $navnPaFil\n";
+
+openstack server create --image 1676adb4-9657-42ed-b31f-b3907cbcd697 --flavor 3d0d6b55-971e-4fe6-9c90-f9c059ff70ca --key-name $navnPaNokel --user-data /home/ubuntu/robusteTjenester/Script/create/$navnPaFil $navnPaMaskin
+fi
+
