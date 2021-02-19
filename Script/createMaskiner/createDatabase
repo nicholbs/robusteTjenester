@@ -15,23 +15,24 @@ mkdir /bfdata
 cockroach start --insecure --store=/bfdata --listen-addr=0.0.0.0:26257 --http-addr=0.0.0.0:8080 --background --join=localhost:26257
 
 #initialize og kjør databasen
-#cockroach init --insecure --host=localhost:26257
+cockroach init --insecure --host=localhost:26257
+
+#vent i 30 sekunder
+sleep 30
 
 #se om databsen kjører
-#ps aux | grep cockroach
-#netstat -anltp | grep cockroach
+ps aux | grep cockroach
+netstat -anltp | grep cockroach
 
 #Gå inn og oppdater databse
 #NB!!!!!! Kommandoene nedenfor lager ny terminal vindu for databasen, så med disse kommandoene vil ikke scriptet funke
 #cockroach sql --insecure --host=localhost:26257
 
-#CREATE DATABASE bf;
-#CREATE USER bfuser;
-#GRANT ALL ON DATABASE bf TO bfuser;
+cockroach sql --insecure --execute="CREATE DATABASE bf;" --execute="CREATE USER bfuser;" --execute="GRANT ALL ON DATABASE bf TO bfuser;"
 
-#USE bf;
-#CREATE table users ( userID INT PRIMARY KEY DEFAULT unique_rowid(), name STRING(50), picture STRING(300), status STRING(10), posts INT, comments INT, lastPostDate TIMESTAMP DEFAULT NOW(), createDate TIMESTAMP DEFAULT NOW());
-#CREATE table posts ( postID INT PRIMARY KEY DEFAULT unique_rowid(), userID INT, text STRING(300), name STRING(150), postDate TIMESTAMP DEFAULT NOW());
-#CREATE table comments ( commentID INT PRIMARY KEY DEFAULT unique_rowid(), postID INT, userID INT, text STRING(300),  postDate TIMESTAMP DEFAULT NOW());
-#CREATE table pictures ( pictureID STRING(300), picture BYTES );
-
+cockroach sql --insecure --execute="USE bf;" --execute="USE bf;
+CREATE table users ( userID INT PRIMARY KEY DEFAULT unique_rowid(), name STRING(50), picture STRING(300), status STRING(10), posts INT, comments INT, lastPostDate TIMESTAMP DEFAULT NOW(), createDate TIMESTAMP DEFAULT NOW());
+CREATE table posts ( postID INT PRIMARY KEY DEFAULT unique_rowid(), userID INT, text STRING(300), name STRING(150), postDate TIMESTAMP DEFAULT NOW());
+CREATE table comments ( commentID INT PRIMARY KEY DEFAULT unique_rowid(), postID INT, userID INT, text STRING(300),  postDate TIMESTAMP DEFAULT NOW());
+CREATE table pictures ( pictureID STRING(300), picture BYTES );
+"
