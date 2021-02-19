@@ -88,8 +88,8 @@ else
                 if openstack floating ip list | grep "None" > /dev/null
                 then
                         printf "\nDet fantes floating ip\n"
-                        openstack floating ip list | grep "None" | awk '{print $4, "   -->   "$2}'
-                        printf "\nCopy paste ID til floating IP du vil ha pAa ny maskin: "
+                        openstack floating ip list | grep "None" | awk '{print $4}'
+                        printf "\nCopy paste floating IP du vil ha pAa ny maskin: "
                         read valgtIp
                         printf "\nDu har valgt floating IP-addresse: $valgtIp\n"
                 else
