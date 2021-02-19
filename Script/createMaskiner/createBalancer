@@ -1,0 +1,24 @@
+#!/bin/bash -x
+#x opsjon gjør at det blir utskrift av alle kommandoer
+
+
+#Nedlastninger
+#Dra til riktig folder for nedlasning
+cd /home/ubuntu/
+
+#Last ned våre script
+git clone https://github.com/nicholbs/robusteTjenester.git
+
+#Installer haproxy
+sudo apt-get update
+sudo apt-get install haproxy net-tools
+
+sudo rm /etc/haproxy/haproxy.cfg
+mv /home/ubuntu/robusteTjenester/balancer/haproxy_balancer.cfg /etc/haproxy/haproxy.cfg
+
+#Etter du har puttet inn IP haproxy skal dirigere trafikk til i haproxy.cfg restart tjenesten
+#Sjekk først om haproxy filen ser riktig ut med:
+#haproxy -c -f /etc/haproxy/haproxy.cfg
+#sudo service haproxy start/restart
+
+

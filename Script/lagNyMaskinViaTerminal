@@ -10,9 +10,43 @@ then
 	printf "\nskjerp deg, skriv et skikkelig navn neste gang\n";
 	exit 1;
 else
-	printf "\nDu skrev navnet: $navnPaMaskin\n";
+	printf "\nDu skrev navnet: $navnPaMaskin\n\n";
 fi
 
+
+#Velg image
+printf "Her er listen av Images: \n"
+openstack image list | grep "Beaver" | awk '{print $4,$5,$6,$7,$8,$9,$10 "   -->   " $2}'
+printf "Copy paste ID til Image du vil ha: "
+read imageId
+
+
+if [ -z "$imageId" ]
+then
+	printf "\nskjerp deg, skriv en skikkelig ID på Image neste gang\n";
+	exit 1;
+else
+	printf "\nDu valgte Image: $imageId\n\n";
+fi
+
+
+#Velg flavor
+printf "Her er listen av flavors: \n"
+openstack flavor list | grep "m1" | awk '{print $4 "   -->   " $2}'
+
+printf "Copy paste ID til flavor du vil ha: "
+read flavorId
+
+if [ -z "$flavorId" ]
+then
+	printf "\nskjerp deg, skriv en skikkelig ID på flavor neste gang\n";
+	exit 1;
+else
+	printf "\nDu valgte flavor: $flavorId\n\n";
+fi
+
+
+printf ""
 
 #Velg Nøkkel til den nye maskinen
 if openstack keypair list | grep "key" > /dev/null
@@ -40,12 +74,40 @@ then	printf "\n Skriv et skikkelig navn bish\n"
 else	printf "\nDu har valgt $navnPaNokel\n"
 fi
 
+#Velg floating Ip til den nye maskinen
+printf "Vil du ha en floating IP-addresse på maskinen (y/n): "
+read hentIp
+
+if [ -z "$hentIp" ]
+then
+        printf "\nSkriv noe neste gang\n"
+        exit 1;
+else
+        if [ "$hentIp" == "y" ]
+        then
+                if openstack floating ip list | grep "None" > /dev/null
+                then
+                        printf "\nDet fantes floating ip\n"
+                        openstack floating ip list | grep "None" | awk '{print $4, "   -->   "$2}'
+                        printf "\nCopy paste ID til floating IP du vil ha pAa ny maskin: "
+                        read valgtIp
+                        printf "\nDu har valgt floating IP-addresse: $valgtIp\n"
+                else
+                        printf "\nDet fantes ikke floating ip\n"
+                        #exit 0;
+                fi
+        else
+                printf "\nDu har valgt Aa ikke knytte floating IP-addresse til ny maskin\n"
+        fi
+
+fi
+
 
 
 
 #Velg script til den nye maskinen
 printf "Nedenfor er oppstart skriptene du kan velge mellom:\n";
-FILES=/home/ubuntu/robusteTjenester/Script/create/*
+FILES=/home/ubuntu/robusteTjenester/Script/createMaskiner/*
 number=1;
 for file in $FILES
 do 
@@ -63,8 +125,14 @@ then
 	printf "\nSkriv ett skikkelig navn\n";
 	exit 1;
 else
-printf "\nDu har valgt filen: $navnPaFil\n";
-
-openstack server create --image 1676adb4-9657-42ed-b31f-b3907cbcd697 --flavor 3d0d6b55-971e-4fe6-9c90-f9c059ff70ca --key-name $navnPaNokel --user-data /home/ubuntu/robusteTjenester/Script/create/$navnPaFil $navnPaMaskin
+	printf "\nDu har valgt filen: $navnPaFil\n";
+	if [ "$hentIp" == "y" ]
+	then
+		openstack server create --image $imageId --flavor $flavorId --key-name $navnPaNokel --user-data /home/ubuntu/robusteTjenester/Script/createMaskiner/$navnPaFil $navnPaMaskin
+		sleep 10;
+		openstack server add floating ip $navnPaMaskin $valgtIp
+	else 
+		openstack server create --image $imageId --flavor $flavorId --key-name $navnPaNokel --user-data /home/ubuntu/robusteTjenester/Script/createMaskiner/$navnPaFil $navnPaMaskin
+	fi
 fi
 
