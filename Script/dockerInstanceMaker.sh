@@ -22,10 +22,13 @@ sudo sh get-docker.sh
 #gå til bookface repository
 cd /home/ubuntu/bookface/
 
+#Laster ned memcache imaget og lager instansen på en gang:
+sudo docker run --name=memcache -p 11211:11211 -d memcached memcached -m 128
+
 #bygg ett image ut i fra bookface repository
 sudo docker build -t docker_image:v0 .
 
 
 #Lage instanse ut av imaget
 #x opsjon gjør at det blir utskrift av alle kommandoer
-sudo docker run -e BF_DB_HOST=192.168.130.10 -e BF_DB_PORT=26257 -e BF_DB_NAME=bf -e BF_DB_USER=bfuser -e BF_WEBHOST=10.212.140.205 -e BF_FRONTPAGE_LIMIT=500 -d -P docker_image:v0
+sudo docker run -e BF_DB_HOST=192.168.130.10 -e BF_DB_PORT=26257 -e BF_DB_NAME=bf -e BF_DB_USER=bfuser -e BF_WEBHOST=10.212.140.205 -e BF_FRONTPAGE_LIMIT=500 -e BF_MEMCACHE_SERVER=$(hostname -I | awk '{print $1}') -d -P docker_image:v0
