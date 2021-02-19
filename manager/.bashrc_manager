@@ -109,7 +109,7 @@ fi
 alias ww1='ssh ubuntu@192.168.131.166'
 alias db1='ssh ubuntu@192.168.130.10'
 alias balancer='ssh ubuntu@192.168.130.57'
-alias ww2='ssh ubuntu@192.168.130.235'
+alias docker='ssh ubuntu@192.168.129.118'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -125,3 +125,5 @@ fi
 # Custom prompt
 export PS1="\[\e[31;40m\]manager\[\e[m\]\w "
 
+# For å få tilgang til openstack kommandoer må environment variabler bli satt ved å source dette skriptet
+source /home/ubuntu/robusteTjenester/manager/DCSG2003_V21_group13-openrc.sh
