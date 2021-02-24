@@ -1,0 +1,6 @@
+Subject: Status robusteTjenester
+
+<tr><td>Users: </td><td>25646</td></tr>
+<tr><td>Posts: </td><td>20830</td></tr>
+<tr><td>Comments: </td><td>15433</td></tr>
+<tr><td></td><td>Name:</td><td>Posts</td></tr> 

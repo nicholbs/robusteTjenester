@@ -1,0 +1,10 @@
+#!/bin/bash -x
+
+
+while true
+do
+echo $'Subject: Status robusteTjenester\n' > email.txt & curl http://10.212.140.205 | grep 'Users\|Posts\|Comments' | awk '{print $1, $2}' >> email.txt;
+sendmail nsellevag@gmail.com < /home/ubuntu/robusteTjenester/Script/email/email.txt
+sleep 3600
+done
+
