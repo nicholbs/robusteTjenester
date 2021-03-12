@@ -1,0 +1,12 @@
+For å sette opp backup filen
+
+lag instance w flavor t.small
+Tell manager of its existence give its ip to manager
+
+#attach the backup1-volume to it:
+	#Make folder format
+		sudo mkfs.ext4 /dev/vdb
+	#Make directory to put voulume in
+		mkdir backup
+	#Mount volume to directory. All you put in this directory will now go into the backup1-volume
+		sudo mount /dev/vdb /mnt
