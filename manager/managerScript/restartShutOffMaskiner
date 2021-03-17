@@ -1,0 +1,17 @@
+#!/bin/bash
+
+ShutOff=$(openstack server list | grep "SHUTOFF" | awk '{print $4}')
+
+#echo "Her er ShutOff: $ShutOff"
+
+navnPaServer=$(echo "$ShutOff" | tr '\n' ' ')
+
+echo "Her er navnPaServer: $navnPaServer"
+
+if [[ $navnPaServer == *"server"* ]]
+then
+        echo "navnPaServer inneholdt $navnPaServer"
+        openstack server start $navnPaServer
+else
+        echo "Den er tom: $Variabel2"
+fi
