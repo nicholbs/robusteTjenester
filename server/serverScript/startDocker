@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#Finnes volumene fra glusterfs, altså bf_config og bf_image
+
+finnesConfig=false
+
+#Erstatt /home/ubuntu/minTest med /bf_config
+while ! $finnesConfig; 
+do
+if [ -d /home/ubuntu/minTest ]
+then
+	echo "den finnes"
+	#systemctl start docker
+	finnesConfig=true
+else
+	echo "den finnes ikke"
+	sleep 10
+fi
+done
+
+#Kyrre sin metode for å starte docker etter at volum er mounter på serverene nedenfor:
+#while ! mount -t glusterfs server1:/bf_config /bf_config; do
+#sleep 2
+#done
+
+#mount -t glusterfs server1:/bf_images /bf_images
+
+#sleep 2
+
+#systemctl start docker
