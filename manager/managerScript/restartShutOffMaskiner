@@ -1,4 +1,5 @@
 #!/bin/bash
+source /home/ubuntu/robusteTjenester/manager/DCSG2003_V21_group13-openrc.sh
 
 ShutOff=$(openstack server list | grep "SHUTOFF" | awk '{print $4}')
 
