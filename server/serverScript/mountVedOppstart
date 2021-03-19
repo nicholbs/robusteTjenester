@@ -1,5 +1,8 @@
 #!/bin/sh
-ipAddresse=hostname -I | awk '{print $1}'
-sudo mount -t glusterfs {$ipAddresse}:bf_config /bf_config
-sudo mount -t glusterfs {$ipAddresse}:bf_images /bf_images
+ipAddresse=$(hostname -I | awk '{print $1}')
+
+#echo $ipAddresse
+
+sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
+sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
 
