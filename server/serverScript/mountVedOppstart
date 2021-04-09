@@ -1,21 +1,6 @@
 #!/bin/bash
 ipAddresse=$(hostname -I | awk '{print $1}')
 MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
-#echo $ipAddresse
-#until [[ "${MountedVolumes}" == "/bf_config /bf_images " ]]; 
-#do
-#	sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
-#	sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
-#	sleep 5s
-	MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
-#done
-
-#if [[ "${MountedVolumes}" == *"/bf_config"* ]]
-#then
-#	echo "De er like config "
-#else
-#	echo "De er ikke loke config"
-#fi
 
 until [[ "${MountedVolumes}" == *"/bf_config"* ]]; do
         echo $MountedVolumes
@@ -31,7 +16,7 @@ until [[ "${MountedVolumes}" == *"/bf_images"* ]]; do
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 done
 
-FILE=/usr/local/bin/alertDiscord
-if test -f "$FILE"; then
-    alertDiscord volum er mounter paa "$HOSTNAME"
-fi
+
+
+url="https://discordapp.com/api/webhooks/830039049229959168/PI9T3bDge_zrEYXf7IHt7DBMepcAZ2pBWRPkPGtqLiWOGzzMHvoQ_Zz97aJsjfDiNfSo"
+curl -H "Content-Type: application/json" -X POST -d '{"content":"'"$HOSTNAME: Volum er mountet"'"}'  $url

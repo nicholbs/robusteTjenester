@@ -4,25 +4,16 @@ MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 
 until [[ "${MountedVolumes}" == *"/bf_config"* ]]; do
         echo $MountedVolumes
-        #sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
         sleep 2s
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 done
 
 until [[ "${MountedVolumes}" == *"/bf_images"* ]]; do
         echo $MountedVolumes
-        #sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
         sleep 2s
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 done
 
-
-
-#until [[ "${MountedVolumes}" == "/bf_config /bf_images " ]]; do
-#	sleep 5s
-#       echo $MountedVolumes
-#        MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
-#done
 
 #Hent serverens ip-addresse
 ipAddresse=$(hostname -I | awk '{print $1}')
@@ -34,7 +25,6 @@ sudo cockroach start --insecure\
 	 --join=192.168.131.156:26257,192.168.131.220:26257,192.168.129.73:26257\
 	 --advertise-addr="${ipAddresse}":26257 --max-offset=1500ms
 
-FILE=/usr/local/bin/alertDiscord
-if test -f "$FILE"; then
-    alertDiscord cockroachdb er startet paa "$HOSTNAME"
-fi
+url="https://discordapp.com/api/webhooks/830039049229959168/PI9T3bDge_zrEYXf7IHt7DBMepcAZ2pBWRPkPGtqLiWOGzzMHvoQ_Zz97aJsjfDiNfSo"
+curl -H "Content-Type: application/json" -X POST -d '{"content":"'"$HOSTNAME: Startet Cockroachdb"'"}'  $url
+

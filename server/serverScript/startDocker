@@ -1,68 +1,30 @@
 #!/bin/bash
 
-#Finnes volumene fra glusterfs, altså bf_config og bf_image
-
-
 finnesDatabase=$(curl http://localhost:8080/health)
 finnesConfig=false
 SUB='{'
 MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
-#if [[ $finnesDatabase == "$SUB"* ]]
-#then
-#	echo "den finneeees"
-#else
-#	echo "ikke finnes"
-#fi
-	
 
-#echo $finnesDatabase
 
 while ! $finnesConfig;
 do
 if [[ $finnesDatabase == "$SUB"* ]];
 then
 	until [[ "${MountedVolumes}" == *"/bf_config"* ]]; do
-        echo $MountedVolumes
-        #sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
         sleep 2s
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 	done
-
 	until [[ "${MountedVolumes}" == *"/bf_images"* ]]; do
-        echo $MountedVolumes
-        #sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
         sleep 2s
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 	done
-
-	#MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
-	#if [ "${MountedVolumes}" == "/bf_config /bf_images " ]
-	#then
-	#	echo "fant mounta volumes"
 	sudo systemctl start docker
 	finnesConfig=true
-	#else
-	#	echo "fant ikke mounta volumes"
-	#fi
-
 else
 	echo "den finnes ikke"
 	sleep 5s
 fi
 done
 
-FILE=/usr/local/bin/alertDiscord
-if test -f "$FILE"; then
-    alertDiscord docker er startet paa "$HOSTNAME"
-fi
-
-#Kyrre sin metode for å starte docker etter at volum er mounter på serverene nedenfor:
-#while ! mount -t glusterfs server1:/bf_config /bf_config; do
-#sleep 2
-#done
-
-#mount -t glusterfs server1:/bf_images /bf_images
-
-#sleep 2
-
-#systemctl start docker
+url="https://discordapp.com/api/webhooks/830039049229959168/PI9T3bDge_zrEYXf7IHt7DBMepcAZ2pBWRPkPGtqLiWOGzzMHvoQ_Zz97aJsjfDiNfSo"
+curl -H "Content-Type: application/json" -X POST -d '{"content":"'"$HOSTNAME: Startet Docker"'"}'  $url
