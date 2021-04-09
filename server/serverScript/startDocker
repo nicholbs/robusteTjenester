@@ -33,7 +33,7 @@ then
 
 else
 	echo "den finnes ikke"
-	sleep 2
+	sleep 5
 fi
 done
 
