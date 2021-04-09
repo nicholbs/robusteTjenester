@@ -14,14 +14,16 @@ then
         sleep 2s
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 	done
+
 	until [[ "${MountedVolumes}" == *"/bf_images"* ]]; do
         sleep 2s
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 	done
+
 	sudo systemctl start docker
 	finnesConfig=true
 else
-	echo "den finnes ikke"
+	finnesDatabase=$(curl http://localhost:8080/health)
 	sleep 5s
 fi
 done
