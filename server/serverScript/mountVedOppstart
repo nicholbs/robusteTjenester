@@ -31,4 +31,7 @@ until [[ "${MountedVolumes}" == *"/bf_images"* ]]; do
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 done
 
-
+FILE=/usr/local/bin/alertDiscord
+if test -f "$FILE"; then
+    alertDiscord volum er mounter paa "$HOSTNAME"
+fi
