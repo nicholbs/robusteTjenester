@@ -10,13 +10,24 @@ MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 	MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 #done
 
+#if [[ "${MountedVolumes}" == *"/bf_config"* ]]
+#then
+#	echo "De er like config "
+#else
+#	echo "De er ikke loke config"
+#fi
 
-
-until [[ "${MountedVolumes}" == "/bf_config /bf_images " ]]; do
-        sleep 5s
+until [[ "${MountedVolumes}" == *"/bf_config"* ]]; do
         echo $MountedVolumes
 	sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
+	sleep 2s
+        MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+done
+
+until [[ "${MountedVolumes}" == *"/bf_images"* ]]; do
+        echo $MountedVolumes
         sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
+        sleep 2s
         MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 done
 
