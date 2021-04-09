@@ -6,7 +6,7 @@
 finnesDatabase=$(curl http://localhost:8080/health)
 finnesConfig=false
 SUB='{'
-
+MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 #if [[ $finnesDatabase == "$SUB"* ]]
 #then
 #	echo "den finneeees"
@@ -21,19 +21,33 @@ while ! $finnesConfig;
 do
 if [[ $finnesDatabase == "$SUB"* ]];
 then
-	MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
-	if [ "${MountedVolumes}" == "/bf_config /bf_images " ]
-	then
-		echo "fant mounta volumes"
-		sudo systemctl start docker
-		finnesConfig=true
-	else
-		echo "fant ikke mounta volumes"
-	fi
+	until [[ "${MountedVolumes}" == *"/bf_config"* ]]; do
+        echo $MountedVolumes
+        #sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
+        sleep 2s
+        MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+	done
+
+	until [[ "${MountedVolumes}" == *"/bf_images"* ]]; do
+        echo $MountedVolumes
+        #sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
+        sleep 2s
+        MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+	done
+
+	#MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+	#if [ "${MountedVolumes}" == "/bf_config /bf_images " ]
+	#then
+	#	echo "fant mounta volumes"
+	sudo systemctl start docker
+	finnesConfig=true
+	#else
+	#	echo "fant ikke mounta volumes"
+	#fi
 
 else
 	echo "den finnes ikke"
-	sleep 5
+	sleep 5s
 fi
 done
 
