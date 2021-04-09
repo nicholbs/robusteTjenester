@@ -2,21 +2,41 @@
 
 #Finnes volumene fra glusterfs, altså bf_config og bf_image
 
-finnesConfig=false
 
-#Erstatt /home/ubuntu/minTest med /bf_config
-while ! $finnesConfig; 
+finnesDatabase=$(curl http://localhost:8080/health)
+finnesConfig=false
+SUB='{'
+
+#if [[ $finnesDatabase == "$SUB"* ]]
+#then
+#	echo "den finneeees"
+#else
+#	echo "ikke finnes"
+#fi
+	
+
+#echo $finnesDatabase
+
+while ! $finnesConfig;
 do
-if [ -d /home/ubuntu/minTest ]
+if [[ $finnesDatabase == "$SUB"* ]];
 then
-	echo "den finnes"
-	#systemctl start docker
-	finnesConfig=true
+	MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+	if [ "${MountedVolumes}" == "/bf_config /bf_images " ]
+	then
+		echo "fant mounta volumes"
+		sudo systemctl start docker
+		finnesConfig=true
+	else
+		echo "fant ikke mounta volumes"
+	fi
+
 else
 	echo "den finnes ikke"
-	sleep 10
+	sleep 2
 fi
 done
+
 
 #Kyrre sin metode for å starte docker etter at volum er mounter på serverene nedenfor:
 #while ! mount -t glusterfs server1:/bf_config /bf_config; do

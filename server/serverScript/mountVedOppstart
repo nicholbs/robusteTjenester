@@ -1,8 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 ipAddresse=$(hostname -I | awk '{print $1}')
-
+MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
 #echo $ipAddresse
+#until [[ "${MountedVolumes}" == "/bf_config /bf_images " ]]; 
+#do
+#	sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
+#	sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
+#	sleep 5s
+	MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+#done
 
-sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
-sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
+
+
+until [[ "${MountedVolumes}" == "/bf_config /bf_images " ]]; do
+        sleep 5s
+        echo $MountedVolumes
+	sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
+        sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
+        MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+done
+
 
