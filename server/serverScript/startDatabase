@@ -15,3 +15,9 @@ sudo cockroach start --insecure\
 	 --http-addr=0.0.0.0:8080 --background\
 	 --join=192.168.131.156:26257,192.168.131.220:26257,192.168.129.73:26257\
 	 --advertise-addr="${ipAddresse}":26257 --max-offset=1500ms
+
+FILE=/usr/local/bin/alertDiscord
+if test -f "$FILE"; then
+    alertDiscord cockroachdb er startet paa "$HOSTNAME"
+fi
+

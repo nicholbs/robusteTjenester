@@ -37,6 +37,10 @@ else
 fi
 done
 
+FILE=/usr/local/bin/alertDiscord
+if test -f "$FILE"; then
+    alertDiscord docker er startet paa "$HOSTNAME"
+fi
 
 #Kyrre sin metode for å starte docker etter at volum er mounter på serverene nedenfor:
 #while ! mount -t glusterfs server1:/bf_config /bf_config; do
