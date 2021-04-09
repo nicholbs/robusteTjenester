@@ -14,7 +14,7 @@ then
         echo "navnPaServer inneholdt $navnPaServer"
         openstack server start $navnPaServer
 	url="https://discordapp.com/api/webhooks/830039049229959168/PI9T3bDge_zrEYXf7IHt7DBMepcAZ2pBWRPkPGtqLiWOGzzMHvoQ_Zz97aJsjfDiNfSo"
-	curl -H "Content-Type: application/json" -X POST -d '{"content":"'"$HOSTNAME: Restartet maskinen $navnPaServer"'"}'  $url
+	curl -H "Content-Type: application/json" -X POST -d '{"content":"'"$HOSTNAME: Restartet $navnPaServer"'"}'  $url
 
 else
         echo "Den er tom: $Variabel2"
