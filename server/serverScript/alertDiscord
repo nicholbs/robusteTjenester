@@ -1,3 +1,4 @@
 #!/bin/bash
-url=""
-dette er min test melding til discord
+url="https://discordapp.com/api/webhooks/830039049229959168/PI9T3bDge_zrEYXf7IHt7DBMepcAZ2pBWRPkPGtqLiWOGzzMHvoQ_Zz97aJsjfDiNfSo"
+
+curl -H "Content-Type: application/json" -X POST -d '{"content":"'"$*"'"}'  $url

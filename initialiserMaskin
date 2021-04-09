@@ -1,0 +1,3 @@
+git config --global user.email "nicholasbs@hotmail.com"
+sudo cp /home/ubuntu/robusteTjenester/server/serverScript/clog /usr/local/bin/clog
+sudo cp /home/ubuntu/robusteTjenester/server/serverScript/alertDiscord /usr/local/bin/alertDiscord
