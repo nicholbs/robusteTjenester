@@ -2,7 +2,9 @@
 ipAddresse=$(hostname -I | awk '{print $1}')
 
 #echo $ipAddresse
-
+until [[ "${MountedVolumes}" == "/bf_config /bf_images " ]];
 sudo mount -t glusterfs $ipAddresse:bf_config /bf_config
 sudo mount -t glusterfs $ipAddresse:bf_images /bf_images
+MountedVolumes=$(df -h | awk '{print $6}'| grep '/bf_*' | tr '\n' ' ')
+done
 
